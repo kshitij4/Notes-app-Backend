@@ -11,7 +11,6 @@ router.get('/', function(req, res, next) {
 router.post('/student/register', async function(req, res) {
 	try{
 	  	//Updating values to the database
-      console.log(req.body);
       let registerUser=new Student(req.body);
       await registerUser.save();
       res.status(201).json("Registered Successfully");
@@ -25,8 +24,6 @@ router.post('/student/login', async function(req,res){
 		console.log(req.body);
 		const email=req.body.email;
 		const password=req.body.password;
-    // console.log(email);
-    // console.log(password);
 		const user = await Student.findOne({email:email});
 		console.log(user);
     console.log(password+"moving to match"+user.password);
@@ -39,12 +36,10 @@ router.post('/student/login', async function(req,res){
 		});
 		
 		if(Match){
-			res.status(201).json(user);
-			return true;
+			res.status(201).json({isSuccess : true});
 		}
 		else{
-			res.status(404).json("Username or password incorrect");
-			return false;
+			res.status(201).json({isSuccess: false,message:"Username or password incorrect"});
 		}
 	}catch(err){
 		res.status(400).json(`User dose not exist`);
