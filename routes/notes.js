@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
 router.post("/createnote",async (req, res) => {
 	let respObj = {
         isSuccess: false,
-        message: "OK",
+        message: "Initial message",
         Data: null
     };
 	try{
@@ -29,6 +29,7 @@ router.post("/createnote",async (req, res) => {
 				 }
 			 });
 			 respObj.isSuccess = true;
+			 respObj.message = 'Note Added Successfully';
 			 console.log(data)
 		res.status(201).json(respObj);
 
@@ -39,20 +40,26 @@ router.post("/createnote",async (req, res) => {
 });
 
 router.get("/searchNote/:userId",async (req,res)=>{
+	let respObj = {
+        isSuccess: false,
+        message: "Initial message",
+        Data: null
+    };
 	try{
 		const userId = req.params.userId;
         console.log(userId);
 		const data = await Note.find({userId:userId});
 		if(data!=null || JSON.stringify(req.userId)=== JSON.stringify(data._id)){
-			res.status(201).json(data);
+			respObj.isSuccess = true;
+			respObj.Data = data[0].notes;
+			res.status(201).json(respObj);
 		}else{
-			res.status(408).json({message:"Create your first Note",
-            isSuccess:false
-        });
+			respObj.message = "Create your first Note";
+			res.status(408).json(respObj);
 		}
 	}catch(error){
-        res.status(404).json({error_message:"Error Occured",
-        isSuccess:false})
+		respObj.message = "Error Occured";
+        res.status(404).json(respObj);
 	}
 })
 

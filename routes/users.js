@@ -35,7 +35,7 @@ router.post('/student/login', async function(req,res){
 		// 	expires:new Date(Date.now() + 900000),
 		// 	httpOnly:true
 		// });
-			res.status(201).json({isSuccess : true});
+			res.status(201).json({isSuccess : true, userId : user._id});
 		}
 		else{
 			res.status(201).json({isSuccess: false,message:"Username or password incorrect"});
