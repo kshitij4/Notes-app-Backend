@@ -29,7 +29,9 @@ router.post("/createnote",async (req, res) => {
 				 }
 			 });
 			 respObj.isSuccess = true;
+			 console.log(data)
 		res.status(201).json(respObj);
+
 	}catch (error) {
 		res.status(404).json({ error_message : `Error Occured biro ${error}` });
 		console.log('error is'+error);
