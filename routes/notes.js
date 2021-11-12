@@ -39,16 +39,22 @@ router.post("/createnote",async (req, res) => {
 });
 
 router.get("/searchNote/:userId",async (req,res)=>{
+	let respObj = {
+        isSuccess: false,
+        message: "OK",
+        Data: null
+    };
 	try{
 		const userId = req.params.userId;
         console.log(userId);
 		const data = await Note.find({userId:userId});
 		if(data!=null || JSON.stringify(req.userId)=== JSON.stringify(data._id)){
-			res.status(201).json(data);
+			respObj.isSuccess=true
+			respObj.Data= data[0].notes;
+			res.status(201).json(respObj);
 		}else{
 			res.status(408).json({message:"Create your first Note",
-            isSuccess:false
-        });
+        	});
 		}
 	}catch(error){
         res.status(404).json({error_message:"Error Occured",
