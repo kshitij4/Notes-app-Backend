@@ -5,13 +5,12 @@ const notesSchema = mongoose.Schema({
 		required:true,
 		ref:"Student"
 	},
-    title:{
-        type:String,
-    },
-    description:{
-        type:String,
-    }
-
+    notes:[
+        {
+         title: String,
+         description: String
+        }
+        ],
 });
 
 const Notes = new mongoose.model("notes", notesSchema);

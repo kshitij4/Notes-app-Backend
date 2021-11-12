@@ -8,23 +8,35 @@ router.get('/', function(req, res, next) {
 });
 
 router.post("/createnote",async (req, res) => {
+	let respObj = {
+        isSuccess: false,
+        message: "OK",
+        Data: null
+    };
 	try{
-		console.log(req.body.description)
-		let notes = new Note({
-        userId:req.body.userId,
-		title:req.body.title,
-        description:req.body.description		
-		});		
-		const data = await notes.save();
-		res.status(201).json({ message: "Notes Added" });
+     	let data = Note.findOneAndUpdate(
+			{ userId: req.body.userId }, 
+			{ $push: { notes:{
+				title:req.body.title,
+				description:req.body.description
+			}}},
+			{ upsert: true },
+		   function (error, success) {
+				 if (error) {
+					 console.log('error is'+error);
+				 } else {
+					 console.log('successs'+success);
+				 }
+			 });
+			 respObj.isSuccess = true;
+		res.status(201).json(respObj);
 	}catch (error) {
-		console.log(req.body);
-		res.status(404).json({ "error message :": `Error Occured biro ${error}` });
-		console.log(error);
+		res.status(404).json({ error_message : `Error Occured biro ${error}` });
+		console.log('error is'+error);
 		}	
 });
 
-router.get("/searchNote/:userId",async(req,res)=>{
+router.get("/searchNote/:userId",async (req,res)=>{
 	try{
 		const userId = req.params.userId;
         console.log(userId);

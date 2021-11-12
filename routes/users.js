@@ -21,21 +21,20 @@ router.post('/student/register', async function(req, res) {
 
 router.post('/student/login', async function(req,res){
   try{
-		console.log(req.body);
+		console.log('aagya mai'+req.body);
 		const email=req.body.email;
 		const password=req.body.password;
 		const user = await Student.findOne({email:email});
 		console.log(user);
-    console.log(password+"moving to match"+user.password);
+   		console.log(password+"moving to match"+user.password);
 		const Match = await bcrypt.compare(password,user.password);
 		console.log("Match hua "+Match);
-		const token = await user.generateAuthToken(); //Generating tokens every time user login
-		res.cookie("jwt",token,{
-			expires:new Date(Date.now() + 900000),
-			httpOnly:true
-		});
-		
 		if(Match){
+			const token = await user.generateAuthToken(); //Generating tokens every time user login
+		// 	res.cookie("jwt",token,{
+		// 	expires:new Date(Date.now() + 900000),
+		// 	httpOnly:true
+		// });
 			res.status(201).json({isSuccess : true});
 		}
 		else{
@@ -46,4 +45,26 @@ router.post('/student/login', async function(req,res){
 	}
 })
 
+router.get('/student/profile', async(req,res)=>{
+	let respObj = {
+        isSuccess: false,
+        message: "OK",
+        Data: null
+    };
+	const userId = req.body.userId;
+	console.log(userId);
+	try {
+		const user = await Student.findOne({_id:userId});
+		console.log(user);
+		if(user){
+			respObj.isSuccess=true,
+			respObj.Data = user;
+			res.status(200).json(respObj);
+		}
+	} catch (error) {
+		res.status(400).json(respObj);
+	}
+
+
+})
 module.exports = router;
