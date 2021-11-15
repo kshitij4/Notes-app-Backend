@@ -38,20 +38,20 @@ router.post('/student/login', async function(req,res){
 			res.status(201).json({isSuccess : true, userId : user._id});
 		}
 		else{
-			res.status(201).json({isSuccess: false,message:"Username or password incorrect"});
+			res.status(401).json({isSuccess: false,message:"Username or password incorrect"});
 		}
 	}catch(err){
 		res.status(400).json(`User dose not exist`);
 	}
 })
 
-router.get('/student/profile', async(req,res)=>{
+router.get('/student/profile/:userId', async(req,res)=>{
 	let respObj = {
         isSuccess: false,
         message: "OK",
         Data: null
     };
-	const userId = req.body.userId;
+	const userId = req.params.userId;
 	console.log(userId);
 	try {
 		const user = await Student.findOne({_id:userId});
