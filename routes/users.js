@@ -54,18 +54,11 @@ router.get('/student/profile/:userId', async(req,res)=>{
 	const userId = req.params.userId;
 	console.log(userId);
 	try {
-		const userId = req.body.userId;
-		console.log(userId);
 		const user = await Student.findOne({_id:userId});
-		const data={
-			firstname:user.firstname,
-			lastname:user.lastname,
-			email:user.email,
-			phone:user.phone
-		}
+		console.log(user);
 		if(user){
 			respObj.isSuccess=true,
-			respObj.Data = data;
+			respObj.Data = user;
 			res.status(200).json(respObj);
 		}
 	} catch (error) {
